@@ -1,5 +1,6 @@
 package com.m2dl.superpeachsis.actors;
 
+import android.graphics.Rect;
 import android.util.Pair;
 
 public abstract class Enemy extends Actor {
@@ -8,4 +9,6 @@ public abstract class Enemy extends Actor {
         super(screenWidth, screenHeight);
         setCoordinate(new Pair<>(screenWidth + getSurface(), screenHeight - getSurface() - getMargin_Y()));
     }
+
+
 }

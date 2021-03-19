@@ -166,79 +166,28 @@ public class GameThread extends Thread {
     }
 
     private void drawPlayer(Canvas canvas) {
-        canvas.drawRect(getPlayerRect(), gameView.getPlayerPaint());
+        canvas.drawRect(player.getRectangle(), gameView.getPlayerPaint());
     }
 
     private void drawEnemy(Canvas canvas) {
-        Rect r = new Rect();
-        if (enemy instanceof Block) {
-            r.top = enemy.getCoordinates().second - surface;
-        } else {
-            r.top = enemy.getCoordinates().second - (surface * 5);
-        }
-        if (enemy instanceof Ghost) {
-            r.right = enemy.getCoordinates().first;
-            r.bottom = enemy.getCoordinates().second;
-            r.left = enemy.getCoordinates().first - (surface * 5);
-        } else {
-            r.left = enemy.getCoordinates().first - surface;
-            r.right = enemy.getCoordinates().first + surface;
-            r.bottom = enemy.getCoordinates().second + surface;
-        }
-        canvas.drawRect(r, gameView.getEnemyPaint(enemy));
+        canvas.drawRect(enemy.getRectangle(), gameView.getEnemyPaint(enemy));
     }
 
     private boolean checkCollission() {
-        Rect rPlayer = getPlayerRect();
-        Rect rEnemy = getEnemyRect();
-
-        int x = rPlayer.left;
-        int y = rPlayer.top;
-
-        if (rEnemy.contains(x, y)) {
-            return true;
-        }
-
-        x = rPlayer.left;
-        y = rPlayer.bottom;
-
-        if (rEnemy.contains(x, y)) {
-            return true;
-        }
-
-
-        x = rPlayer.right;
-        y = rPlayer.bottom;
-
-        if (rEnemy.contains(x, y)) {
-            return true;
-        }
-
-        x = rPlayer.right;
-        y = rPlayer.top;
-
-        if (rEnemy.contains(x, y)) {
+        Rect rPlayer = player.getRectangle();
+        int x_A = rPlayer.left;
+        int y_A = rPlayer.top;
+        int x_B = rPlayer.left;
+        int y_B = rPlayer.bottom;
+        int x_C = rPlayer.right;
+        int y_C = rPlayer.bottom;
+        int x_D = rPlayer.right;
+        int y_D = rPlayer.top;
+        Rect rEnemy = enemy.getRectangle();
+        if (rEnemy.contains(x_A, y_A) || rEnemy.contains(x_B, y_B) || rEnemy.contains(x_C, y_C) || rEnemy.contains(x_D, y_D)) {
             return true;
         }
 
         return false;
-    }
-
-    private Rect getEnemyRect() {
-        Rect r = new Rect();
-        r.left = enemy.getCoordinates().first - surface;
-        r.top = enemy.getCoordinates().second - surface;
-        r.right = enemy.getCoordinates().first + surface;
-        r.bottom = enemy.getCoordinates().second + surface;
-        return r;
-    }
-
-    private Rect getPlayerRect() {
-        Rect r = new Rect();
-        r.left = player.getCoordinates().first - surface;
-        r.top = player.getCoordinates().second - surface;
-        r.right = player.getCoordinates().first + surface;
-        r.bottom = player.getCoordinates().second + surface;
-        return r;
     }
 }

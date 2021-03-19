@@ -1,5 +1,6 @@
 package com.m2dl.superpeachsis.actors;
 
+import android.graphics.Rect;
 import android.util.Pair;
 
 public abstract class Actor {
@@ -41,4 +42,6 @@ public abstract class Actor {
     }
 
     public abstract void refreshCoordinate();
+
+    public abstract Rect getRectangle();
 }
