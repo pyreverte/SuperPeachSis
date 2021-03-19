@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SuperPeachSis</string>
+    <string name="super_peach_sis">Super Peach Sis</string>
+    <string name="best_scrore">Best scrore :</string>
+    <string name="new_game">New Game</string>
+    <string name="quit">Quit</string>
+    <string name="about">About</string>
 </resources>
