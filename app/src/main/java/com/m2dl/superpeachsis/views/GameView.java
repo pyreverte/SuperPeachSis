@@ -1,23 +1,48 @@
 package com.m2dl.superpeachsis.views;
 
-import android.app.Notification;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
-import com.m2dl.superpeachsis.activities.GameActivity;
+import com.m2dl.superpeachsis.threads.GameThread;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
+    private final int surface = 50;
+    private final int margin = 50;
+    private GameThread gameThread;
+
+    // first : X
+    // second : Y
+    private Pair<Integer, Integer> coordinatesPlayer;
+
+    public Paint getPlayerPaint() {
+        return playerPaint;
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
     private int screenWidth;
     private int screenHeight;
-    private Paint backgroundPaint = new Paint(Color.DKGRAY);
+    private final Paint backgroundPaint = new Paint() {{
+        setColor(Color.CYAN);
+    }};
+
+    private final Paint playerPaint = new Paint() {{
+        setColor(Color.GREEN);
+    }};
 
     public GameView(Context context) {
         super(context);
@@ -27,12 +52,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
-
+        this.coordinatesPlayer = new Pair<>(surface + margin, screenHeight - surface);
+        getHolder().addCallback(this);
+        this.gameThread = new GameThread(getHolder(), this);
+        setFocusable(true);
     }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-
+        gameThread.setRunning(true);
+        gameThread.start();
     }
 
     @Override
@@ -42,7 +71,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-
+        boolean retry = true;
+        gameThread.setRunning(false);
+        while (retry) {
+            try {
+                gameThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -52,4 +90,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawColor(backgroundPaint.getColor());
         }
     }
+
+
 }
