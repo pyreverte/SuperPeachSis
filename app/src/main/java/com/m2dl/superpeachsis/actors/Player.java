@@ -30,14 +30,14 @@ public class Player extends Actor {
     @Override
     public void refreshCoordinate() {
         if (isJumping()) {
-            int stride = 10;
+            int stride = 5;
             if (jumpHighSkipped()) {
                 descending = true;
             }
             if (descending) {
                 descending(stride);
             } else {
-                ascending(stride);
+                ascending(stride + 5);
             }
             jumping = !getCoordinates().second.equals(defaultY);
         } else {
@@ -55,6 +55,6 @@ public class Player extends Actor {
     }
 
     private boolean jumpHighSkipped() {
-        return getCoordinates().second < 0.6 * getScreenHeight();
+        return getCoordinates().second < 0.7 * getScreenHeight();
     }
 }

@@ -13,6 +13,7 @@ import android.view.SurfaceHolder;
 import com.m2dl.superpeachsis.actors.Block;
 import com.m2dl.superpeachsis.actors.Player;
 import com.m2dl.superpeachsis.views.GameView;
+
 import java.util.Random;
 
 public class GameThread extends Thread {
@@ -72,11 +73,12 @@ public class GameThread extends Thread {
                         enemy.refreshCoordinate();
                         drawEnemy(canvas);
                         checkEnemyIsOnScreen();
-                    }
-                    else {
+                    } else {
                         spawnEnemy();
                     }
-
+                    if (checkCollission()) {
+                        gameView.endGame();
+                    }
                 }
             } catch (Exception ignored) {
             } finally {
@@ -99,7 +101,6 @@ public class GameThread extends Thread {
                     shakeSensorListener,
                     shakeSensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
-
         }
     }
 
@@ -109,7 +110,6 @@ public class GameThread extends Thread {
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
             // TODO Auto-generated method stub
-
         }
 
         @Override
@@ -138,7 +138,6 @@ public class GameThread extends Thread {
                 }
             }
         }
-
     };
 
     private static int getRandomNumberInRange(int[] array) {
@@ -147,7 +146,7 @@ public class GameThread extends Thread {
     }
 
     private void spawnEnemy() {
-        int i = getRandomNumberInRange(new int[]{0,1,2,3,4,5,6,7,8,9});
+        int i = getRandomNumberInRange(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
         if (i < 10) {
             this.enemy = new Block(gameView.getScreenWidth(), gameView.getScreenHeight());
         }
@@ -160,20 +159,64 @@ public class GameThread extends Thread {
     }
 
     private void drawPlayer(Canvas canvas) {
-        Rect r = new Rect();
-        r.left = player.getCoordinates().first - surface;
-        r.top = player.getCoordinates().second - surface;
-        r.right = player.getCoordinates().first + surface;
-        r.bottom = player.getCoordinates().second + surface;
-        canvas.drawRect(r, gameView.getPlayerPaint());
+        canvas.drawRect(getPlayerRect(), gameView.getPlayerPaint());
     }
 
     private void drawEnemy(Canvas canvas) {
+        canvas.drawRect(getEnemyRect(), gameView.getEnemyPaint(enemy));
+    }
+
+    private boolean checkCollission() {
+        Rect rPlayer = getPlayerRect();
+        Rect rEnemy = getEnemyRect();
+
+        int x = rPlayer.left;
+        int y = rPlayer.top;
+
+        if (rEnemy.contains(x, y)) {
+            return true;
+        }
+
+        x = rPlayer.left;
+        y = rPlayer.bottom;
+
+        if (rEnemy.contains(x, y)) {
+            return true;
+        }
+
+
+        x = rPlayer.right;
+        y = rPlayer.bottom;
+
+        if (rEnemy.contains(x, y)) {
+            return true;
+        }
+
+        x = rPlayer.right;
+        y = rPlayer.top;
+
+        if (rEnemy.contains(x, y)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private Rect getEnemyRect() {
         Rect r = new Rect();
         r.left = enemy.getCoordinates().first - surface;
         r.top = enemy.getCoordinates().second - surface;
         r.right = enemy.getCoordinates().first + surface;
         r.bottom = enemy.getCoordinates().second + surface;
-        canvas.drawRect(r, gameView.getEnemyPaint(enemy));
+        return r;
+    }
+
+    private Rect getPlayerRect() {
+        Rect r = new Rect();
+        r.left = player.getCoordinates().first - surface;
+        r.top = player.getCoordinates().second - surface;
+        r.right = player.getCoordinates().first + surface;
+        r.bottom = player.getCoordinates().second + surface;
+        return r;
     }
 }

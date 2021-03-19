@@ -20,7 +20,7 @@ public class GameActivity extends Activity {
         int screenWidth = displayMetrics.widthPixels;
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(new GameView(this, screenHeight, screenWidth));
+        setContentView(new GameView(this, screenHeight, screenWidth, this));
     }
 
     public void toEndActivity() {
