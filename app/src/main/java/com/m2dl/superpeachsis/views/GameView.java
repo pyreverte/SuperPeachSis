@@ -33,6 +33,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         } else if (enemy instanceof Barrier) {
             return enemyBarrierPaint;
         } else {
+            if (enemy.isDeadly()) {
+                return enemyDeadlyGhostPaint;
+            }
             return enemyGhostPaint;
         }
     }
@@ -61,6 +64,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Paint enemyBarrierPaint = new Paint() {{
         setColor(Color.BLUE);
+    }};
+
+    private final Paint enemyDeadlyGhostPaint = new Paint() {{
+        setColor(Color.BLACK);
     }};
 
     private final Paint enemyGhostPaint = new Paint() {{

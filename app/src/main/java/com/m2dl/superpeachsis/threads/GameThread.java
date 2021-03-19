@@ -80,6 +80,7 @@ public class GameThread extends Thread {
                     player.refreshCoordinate();
                     drawPlayer(canvas);
 
+                    checkLight();
                     // Enemy
                     if (enemy != null) {
                         enemy.refreshCoordinate();
@@ -88,8 +89,18 @@ public class GameThread extends Thread {
                     } else {
                         spawnEnemy();
                     }
-                    if (checkCollission()) {
-                        gameView.endGame();
+                    if (enemy instanceof Ghost) {
+                        if (enemy.isDeadly()) {
+                            if (checkCollission()) {
+                                gameView.endGame();
+                            }
+                        }
+
+                    }
+                    else {
+                        if (checkCollission()) {
+                            gameView.endGame();
+                        }
                     }
                 }
             } catch (Exception ignored) {
@@ -150,6 +161,45 @@ public class GameThread extends Thread {
                 }
             }
         }
+    };
+
+    public void checkLight() {
+        SensorManager mySensorManager = (SensorManager)gameView.getContext().getSystemService(Context.SENSOR_SERVICE);
+        Sensor lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        if(lightSensor != null){
+            mySensorManager.registerListener(
+                    lightSensorListener,
+                    lightSensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+
+        }
+    }
+
+    private final SensorEventListener lightSensorListener
+            = new SensorEventListener(){
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if(event.sensor.getType() == Sensor.TYPE_LIGHT){
+                if (event.values[0] < 10) {
+                    if (enemy instanceof Ghost) {
+                        enemy.setDeadly(false);
+                    }
+                }
+                else {
+                    if (enemy instanceof Ghost) {
+                        enemy.setDeadly(true);
+                    }
+                }
+            }
+        }
+
     };
 
     private static int getRandomNumberInRange(int[] array) {
