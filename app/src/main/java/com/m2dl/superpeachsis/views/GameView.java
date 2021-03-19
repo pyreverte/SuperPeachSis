@@ -20,6 +20,10 @@ import com.m2dl.superpeachsis.threads.GameThread;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
+    public GameActivity getGameActivity() {
+        return gameActivity;
+    }
+
     private GameActivity gameActivity;
     private GameThread gameThread;
 
@@ -118,6 +122,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         if (canvas != null) {
             canvas.drawColor(backgroundPaint.getColor());
+            canvas.drawText("Score " + String.valueOf(gameThread.getScore() - 1), screenWidth * 0.8f, screenHeight * 0.05f, new Paint() {{
+                setColor(Color.RED);
+                setTextSize(50);
+            }});
         }
     }
 
