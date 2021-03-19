@@ -16,6 +16,7 @@ import com.m2dl.superpeachsis.actors.Enemy;
 import com.m2dl.superpeachsis.actors.Ghost;
 import com.m2dl.superpeachsis.actors.Player;
 import com.m2dl.superpeachsis.views.GameView;
+
 import java.util.Random;
 
 public class GameThread extends Thread {
@@ -75,11 +76,12 @@ public class GameThread extends Thread {
                         enemy.refreshCoordinate();
                         drawEnemy(canvas);
                         checkEnemyIsOnScreen();
-                    }
-                    else {
+                    } else {
                         spawnEnemy();
                     }
-
+                    if (checkCollission()) {
+                        gameView.endGame();
+                    }
                 }
             } catch (Exception ignored) {
             } finally {
@@ -102,7 +104,6 @@ public class GameThread extends Thread {
                     shakeSensorListener,
                     shakeSensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
-
         }
     }
 
@@ -112,7 +113,6 @@ public class GameThread extends Thread {
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
             // TODO Auto-generated method stub
-
         }
 
         @Override
@@ -141,7 +141,6 @@ public class GameThread extends Thread {
                 }
             }
         }
-
     };
 
     private static int getRandomNumberInRange(int[] array) {
@@ -150,14 +149,12 @@ public class GameThread extends Thread {
     }
 
     private void spawnEnemy() {
-        int i = getRandomNumberInRange(new int[]{0,1,2,3,4,5,6,7,8,9});
+        int i = getRandomNumberInRange(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
         if (i < 6) {
             this.enemy = new Block(gameView.getScreenWidth(), gameView.getScreenHeight());
-        }
-        else if (6 <= i && i < 9) {
+        } else if (6 <= i && i < 9) {
             this.enemy = new Barrier(gameView.getScreenWidth(), gameView.getScreenHeight());
-        }
-        else {
+        } else {
             this.enemy = new Ghost(gameView.getScreenWidth(), gameView.getScreenHeight());
         }
     }
@@ -169,32 +166,79 @@ public class GameThread extends Thread {
     }
 
     private void drawPlayer(Canvas canvas) {
-        Rect r = new Rect();
-        r.left = player.getCoordinates().first - surface;
-        r.top = player.getCoordinates().second - surface;
-        r.right = player.getCoordinates().first + surface;
-        r.bottom = player.getCoordinates().second + surface;
-        canvas.drawRect(r, gameView.getPlayerPaint());
+        canvas.drawRect(getPlayerRect(), gameView.getPlayerPaint());
     }
 
     private void drawEnemy(Canvas canvas) {
         Rect r = new Rect();
         if (enemy instanceof Block) {
             r.top = enemy.getCoordinates().second - surface;
-        }
-        else {
+        } else {
             r.top = enemy.getCoordinates().second - (surface * 5);
         }
         if (enemy instanceof Ghost) {
             r.right = enemy.getCoordinates().first;
             r.bottom = enemy.getCoordinates().second;
             r.left = enemy.getCoordinates().first - (surface * 5);
-        }
-        else {
+        } else {
             r.left = enemy.getCoordinates().first - surface;
             r.right = enemy.getCoordinates().first + surface;
             r.bottom = enemy.getCoordinates().second + surface;
         }
         canvas.drawRect(r, gameView.getEnemyPaint(enemy));
+    }
+
+    private boolean checkCollission() {
+        Rect rPlayer = getPlayerRect();
+        Rect rEnemy = getEnemyRect();
+
+        int x = rPlayer.left;
+        int y = rPlayer.top;
+
+        if (rEnemy.contains(x, y)) {
+            return true;
+        }
+
+        x = rPlayer.left;
+        y = rPlayer.bottom;
+
+        if (rEnemy.contains(x, y)) {
+            return true;
+        }
+
+
+        x = rPlayer.right;
+        y = rPlayer.bottom;
+
+        if (rEnemy.contains(x, y)) {
+            return true;
+        }
+
+        x = rPlayer.right;
+        y = rPlayer.top;
+
+        if (rEnemy.contains(x, y)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private Rect getEnemyRect() {
+        Rect r = new Rect();
+        r.left = enemy.getCoordinates().first - surface;
+        r.top = enemy.getCoordinates().second - surface;
+        r.right = enemy.getCoordinates().first + surface;
+        r.bottom = enemy.getCoordinates().second + surface;
+        return r;
+    }
+
+    private Rect getPlayerRect() {
+        Rect r = new Rect();
+        r.left = player.getCoordinates().first - surface;
+        r.top = player.getCoordinates().second - surface;
+        r.right = player.getCoordinates().first + surface;
+        r.bottom = player.getCoordinates().second + surface;
+        return r;
     }
 }
