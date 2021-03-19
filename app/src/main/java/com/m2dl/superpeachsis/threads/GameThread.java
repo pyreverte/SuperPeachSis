@@ -1,6 +1,7 @@
 package com.m2dl.superpeachsis.threads;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.hardware.Sensor;
@@ -22,6 +23,12 @@ import java.util.Random;
 public class GameThread extends Thread {
 
     private Player player;
+
+    public int getScore() {
+        return score;
+    }
+
+    private int score;
 
     public Enemy getEnemy() {
         return enemy;
@@ -58,6 +65,7 @@ public class GameThread extends Thread {
         this.gameView = gameView;
         this.player = new Player(gameView.getScreenWidth(), gameView.getScreenHeight());
         this.enemy = null;
+        this.score = 0;
     }
 
     private boolean running;
@@ -88,6 +96,7 @@ public class GameThread extends Thread {
                         checkEnemyIsOnScreen();
                     } else {
                         spawnEnemy();
+                        score++;
                     }
                     if (enemy instanceof Ghost) {
                         if (enemy.isDeadly()) {
@@ -96,10 +105,13 @@ public class GameThread extends Thread {
                             }
                         }
 
-                    }
-                    else {
+                    } else {
                         if (checkCollission()) {
                             gameView.endGame();
+                            SharedPreferences sharedPreferences = gameView.getGameActivity().getSharedPreferences("PREFERENCES", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("score", score - 1);
+                            editor.apply();
                         }
                     }
                 }
@@ -164,9 +176,9 @@ public class GameThread extends Thread {
     };
 
     public void checkLight() {
-        SensorManager mySensorManager = (SensorManager)gameView.getContext().getSystemService(Context.SENSOR_SERVICE);
+        SensorManager mySensorManager = (SensorManager) gameView.getContext().getSystemService(Context.SENSOR_SERVICE);
         Sensor lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if(lightSensor != null){
+        if (lightSensor != null) {
             mySensorManager.registerListener(
                     lightSensorListener,
                     lightSensor,
@@ -176,7 +188,7 @@ public class GameThread extends Thread {
     }
 
     private final SensorEventListener lightSensorListener
-            = new SensorEventListener(){
+            = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -186,13 +198,12 @@ public class GameThread extends Thread {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            if(event.sensor.getType() == Sensor.TYPE_LIGHT){
+            if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                 if (event.values[0] < 10) {
                     if (enemy instanceof Ghost) {
                         enemy.setDeadly(false);
                     }
-                }
-                else {
+                } else {
                     if (enemy instanceof Ghost) {
                         enemy.setDeadly(true);
                     }
