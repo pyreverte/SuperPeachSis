@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:background="#B4B4FF"
     tools:context=".activities.EndActivity">
 
     <LinearLayout
@@ -18,7 +19,8 @@
             android:layout_gravity="center"
             android:padding="5dp"
             android:text="@string/you_lost"
-            android:textSize="40sp" />
+            android:textColor="#000000"
+            android:textSize="50sp" />
 
 
         <LinearLayout

@@ -18,9 +18,4 @@ public class Ghost extends Enemy {
         r.left = this.getCoordinates().first - (getSurface() * 5);
         return r;
     }
-
-    @Override
-    public void refreshCoordinate() {
-        setCoordinate(new Pair<>(getCoordinates().first - 5, getCoordinates().second));
-    }
 }
