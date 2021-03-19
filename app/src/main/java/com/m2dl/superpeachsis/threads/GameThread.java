@@ -13,7 +13,6 @@ import android.view.SurfaceHolder;
 import com.m2dl.superpeachsis.actors.Barrier;
 import com.m2dl.superpeachsis.actors.Block;
 import com.m2dl.superpeachsis.actors.Enemy;
-import com.m2dl.superpeachsis.actors.Ghost;
 import com.m2dl.superpeachsis.actors.Player;
 import com.m2dl.superpeachsis.views.GameView;
 
@@ -163,8 +162,6 @@ public class GameThread extends Thread {
             this.enemy = new Block(gameView.getScreenWidth(), gameView.getScreenHeight());
         } else if (6 <= i && i < 9) {
             this.enemy = new Barrier(gameView.getScreenWidth(), gameView.getScreenHeight());
-        } else {
-            this.enemy = new Ghost(gameView.getScreenWidth(), gameView.getScreenHeight());
         }
     }
 

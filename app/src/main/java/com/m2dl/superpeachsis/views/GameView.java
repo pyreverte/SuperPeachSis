@@ -30,10 +30,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public Paint getEnemyPaint(Enemy enemy) {
         if (enemy instanceof Block) {
             return enemyBlockPaint;
-        } else if (enemy instanceof Barrier) {
-            return enemyBarrierPaint;
         } else {
-            return enemyGhostPaint;
+            return enemyBarrierPaint;
         }
     }
 
