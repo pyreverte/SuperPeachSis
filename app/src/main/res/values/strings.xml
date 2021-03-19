@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">SuperPeachSis</string>
+    <string name="super_peach_sis">Super Peach Sis</string>
+    <string name="best_scrore">Best scrore :</string>
+    <string name="new_game">New Game</string>
+    <string name="quit">Quit</string>
+    <string name="about">About</string>
+    <string name="retry">Retry</string>
+    <string name="main_menu">Main menu</string>
+    <string name="you_lost">You lost !</string>
+    <string name="your_score">Your score :</string>
 </resources>
