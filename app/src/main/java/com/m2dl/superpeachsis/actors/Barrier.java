@@ -18,9 +18,4 @@ public class Barrier extends Enemy {
         r.bottom = this.getCoordinates().second + getSurface();
         return r;
     }
-
-    @Override
-    public void refreshCoordinate() {
-        setCoordinate(new Pair<>(getCoordinates().first - 5, getCoordinates().second));
-    }
 }

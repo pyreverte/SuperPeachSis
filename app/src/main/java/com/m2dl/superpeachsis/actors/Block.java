@@ -3,6 +3,8 @@ package com.m2dl.superpeachsis.actors;
 import android.graphics.Rect;
 import android.util.Pair;
 
+import java.util.Random;
+
 public class Block extends Enemy {
 
     public Block(int screenWidth, int screenHeight) {
@@ -19,8 +21,14 @@ public class Block extends Enemy {
         return r;
     }
 
+    private static int getRandomNumberInRange(int[] array) {
+        int rnd = new Random().nextInt(array.length);
+        return array[rnd];
+    }
+
     @Override
     public void refreshCoordinate() {
-        setCoordinate(new Pair<>(getCoordinates().first - 5, getCoordinates().second));
+        int i = getRandomNumberInRange(new int[]{11, 12, 13});
+        setCoordinate(new Pair<>(getCoordinates().first - i, getCoordinates().second));
     }
 }

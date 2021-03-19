@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#B4B4FF"
     tools:context=".activities.MainActivity">
 
     <LinearLayout
@@ -20,6 +21,7 @@
             android:padding="5dp"
             android:text="@string/super_peach_sis"
             android:textAlignment="center"
+            android:textColor="#DB6551"
             android:textSize="50sp" />
 
         <LinearLayout
