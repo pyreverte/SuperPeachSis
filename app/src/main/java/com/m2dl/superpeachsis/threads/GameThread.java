@@ -10,10 +10,8 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import com.m2dl.superpeachsis.actors.Barrier;
 import com.m2dl.superpeachsis.actors.Block;
 import com.m2dl.superpeachsis.actors.Enemy;
-import com.m2dl.superpeachsis.actors.Ghost;
 import com.m2dl.superpeachsis.actors.Player;
 import com.m2dl.superpeachsis.views.GameView;
 
@@ -129,10 +127,7 @@ public class GameThread extends Thread {
                     z = event.values[2];
 
                     float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
-                    Log.v("SENSOR", "Speed : " + speed);
                     if (speed > SHAKE_THRESHOLD) {
-                        // TODO Shake Detected
-                        Log.v("SENSOR", "Shake Detected");
                         player.setJumping(true);
                     }
                     last_x = x;
@@ -149,14 +144,7 @@ public class GameThread extends Thread {
     }
 
     private void spawnEnemy() {
-        int i = getRandomNumberInRange(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
-        if (i < 6) {
-            this.enemy = new Block(gameView.getScreenWidth(), gameView.getScreenHeight());
-        } else if (6 <= i && i < 9) {
-            this.enemy = new Barrier(gameView.getScreenWidth(), gameView.getScreenHeight());
-        } else {
-            this.enemy = new Ghost(gameView.getScreenWidth(), gameView.getScreenHeight());
-        }
+        this.enemy = new Block(gameView.getScreenWidth(), gameView.getScreenHeight());
     }
 
     private void checkEnemyIsOnScreen() {
@@ -171,20 +159,10 @@ public class GameThread extends Thread {
 
     private void drawEnemy(Canvas canvas) {
         Rect r = new Rect();
-        if (enemy instanceof Block) {
-            r.top = enemy.getCoordinates().second - surface;
-        } else {
-            r.top = enemy.getCoordinates().second - (surface * 5);
-        }
-        if (enemy instanceof Ghost) {
-            r.right = enemy.getCoordinates().first;
-            r.bottom = enemy.getCoordinates().second;
-            r.left = enemy.getCoordinates().first - (surface * 5);
-        } else {
-            r.left = enemy.getCoordinates().first - surface;
-            r.right = enemy.getCoordinates().first + surface;
-            r.bottom = enemy.getCoordinates().second + surface;
-        }
+        r.top = enemy.getCoordinates().second - surface;
+        r.left = enemy.getCoordinates().first - surface;
+        r.right = enemy.getCoordinates().first + surface;
+        r.bottom = enemy.getCoordinates().second + surface;
         canvas.drawRect(r, gameView.getEnemyPaint(enemy));
     }
 
