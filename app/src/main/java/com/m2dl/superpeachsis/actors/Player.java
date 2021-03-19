@@ -1,5 +1,6 @@
 package com.m2dl.superpeachsis.actors;
 
+import android.graphics.Rect;
 import android.util.Pair;
 
 public class Player extends Actor {
@@ -44,6 +45,16 @@ public class Player extends Actor {
             jumping = false;
             descending = false;
         }
+    }
+
+    @Override
+    public Rect getRectangle() {
+        Rect r = new Rect();
+        r.left = this.getCoordinates().first - getSurface();
+        r.top = this.getCoordinates().second - getSurface();
+        r.right = this.getCoordinates().first + getSurface();
+        r.bottom = this.getCoordinates().second + getSurface();
+        return r;
     }
 
     private void ascending(int stride) {
