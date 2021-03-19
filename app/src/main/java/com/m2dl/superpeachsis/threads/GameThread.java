@@ -22,6 +22,15 @@ import java.util.Random;
 public class GameThread extends Thread {
 
     private Player player;
+
+    public Enemy getEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(Enemy enemy) {
+        this.enemy = enemy;
+    }
+
     private Enemy enemy;
     private final SurfaceHolder surfaceHolder;
     private final GameView gameView;

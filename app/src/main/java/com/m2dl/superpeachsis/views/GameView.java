@@ -1,9 +1,12 @@
 package com.m2dl.superpeachsis.views;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -109,6 +112,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if (canvas != null) {
             canvas.drawColor(backgroundPaint.getColor());
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (gameThread.getEnemy() instanceof Barrier) {
+            Rect r = gameThread.getEnemy().getRectangle();
+            int x = Math.round(event.getRawX());
+            int y = Math.round(event.getRawY());
+            if (r.contains(x, y)) {
+                gameThread.setEnemy(null);
+            }
+        }
+        return super.onTouchEvent(event);
     }
 
 
