@@ -4,27 +4,21 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Pair;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import com.m2dl.superpeachsis.activities.GameActivity;
 import com.m2dl.superpeachsis.actors.Barrier;
 import com.m2dl.superpeachsis.actors.Block;
 import com.m2dl.superpeachsis.actors.Enemy;
-import com.m2dl.superpeachsis.actors.Ghost;
 import com.m2dl.superpeachsis.threads.GameThread;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private final int surface = 50;
-    private final int margin = 50;
+    private GameActivity gameActivity;
     private GameThread gameThread;
-
-    // first : X
-    // second : Y
-    private Pair<Integer, Integer> coordinatesPlayer;
 
     public Paint getPlayerPaint() {
         return playerPaint;
@@ -33,11 +27,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public Paint getEnemyPaint(Enemy enemy) {
         if (enemy instanceof Block) {
             return enemyBlockPaint;
-        }
-        else if (enemy instanceof Barrier) {
+        } else if (enemy instanceof Barrier) {
             return enemyBarrierPaint;
-        }
-        else  {
+        } else {
             return enemyGhostPaint;
         }
     }
@@ -76,11 +68,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
     }
 
-    public GameView(Context context, int screenHeight, int screenWidth) {
+    public GameView(Context context, int screenHeight, int screenWidth, GameActivity gameActivity) {
         super(context);
+        this.gameActivity = gameActivity;
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
-        this.coordinatesPlayer = new Pair<>(surface + margin, screenHeight - surface);
         getHolder().addCallback(this);
         this.gameThread = new GameThread(getHolder(), this);
         setFocusable(true);
@@ -120,4 +112,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
+    public void endGame() {
+        gameThread.setRunning(false);
+        gameActivity.toEndActivity();
+    }
 }
