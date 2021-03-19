@@ -10,8 +10,10 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
+import com.m2dl.superpeachsis.actors.Barrier;
 import com.m2dl.superpeachsis.actors.Block;
 import com.m2dl.superpeachsis.actors.Enemy;
+import com.m2dl.superpeachsis.actors.Ghost;
 import com.m2dl.superpeachsis.threads.GameThread;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
@@ -32,9 +34,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if (enemy instanceof Block) {
             return enemyBlockPaint;
         }
-        return new Paint() {{
-            setColor(Color.BLACK);
-        }};
+        else if (enemy instanceof Barrier) {
+            return enemyBarrierPaint;
+        }
+        else  {
+            return enemyGhostPaint;
+        }
     }
 
     public int getScreenWidth() {
@@ -57,6 +62,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Paint enemyBlockPaint = new Paint() {{
         setColor(Color.RED);
+    }};
+
+    private final Paint enemyBarrierPaint = new Paint() {{
+        setColor(Color.BLUE);
+    }};
+
+    private final Paint enemyGhostPaint = new Paint() {{
+        setColor(Color.WHITE);
     }};
 
     public GameView(Context context) {

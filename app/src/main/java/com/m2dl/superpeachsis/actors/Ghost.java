@@ -2,9 +2,9 @@ package com.m2dl.superpeachsis.actors;
 
 import android.util.Pair;
 
-public class Block extends Enemy {
+public class Ghost extends Enemy {
 
-    public Block(int screenWidth, int screenHeight) {
+    public Ghost(int screenWidth, int screenHeight) {
         super(screenWidth, screenHeight);
     }
 
