@@ -4,6 +4,7 @@ import android.util.Pair;
 
 public class Player extends Actor {
     private Integer defaultY;
+    private boolean descending;
 
     public boolean isJumping() {
         return jumping;
@@ -22,17 +23,38 @@ public class Player extends Actor {
         setCoordinate(new Pair<>(getSurface() + getMargin_X(), screenHeight - getSurface() - getMargin_Y()));
     }
 
+    public void setDescending(boolean descending) {
+        this.descending = descending;
+    }
+
     @Override
     public void refreshCoordinate() {
-        if (!getCoordinates().second.equals(defaultY) && isJumping()) {
-            int stride = 3;
-            if (getCoordinates().second > 0.2 * getScreenWidth()) { // Pic du saut atteint ?
-                setCoordinate(new Pair<>(getCoordinates().first, getCoordinates().second - stride));
-            } else {
-                setCoordinate(new Pair<>(getCoordinates().first, getCoordinates().second + stride));
+        if (isJumping()) {
+            int stride = 10;
+            if (jumpHighSkipped()) {
+                descending = true;
             }
+            if (descending) {
+                descending(stride);
+            } else {
+                ascending(stride);
+            }
+            jumping = !getCoordinates().second.equals(defaultY);
         } else {
             jumping = false;
+            descending = false;
         }
+    }
+
+    private void ascending(int stride) {
+        setCoordinate(new Pair<>(getCoordinates().first, getCoordinates().second - stride));
+    }
+
+    private void descending(int stride) {
+        setCoordinate(new Pair<>(getCoordinates().first, getCoordinates().second + stride));
+    }
+
+    private boolean jumpHighSkipped() {
+        return getCoordinates().second < 0.6 * getScreenHeight();
     }
 }
