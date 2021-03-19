@@ -1,8 +1,7 @@
 package com.m2dl.superpeachsis.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -14,7 +13,6 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -24,5 +22,12 @@ public class GameActivity extends Activity {
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new GameView(this, screenHeight, screenWidth));
+
+        toEndActivity();
+    }
+
+    public void toEndActivity() {
+        startActivity(new Intent(this, EndActivity.class));
+        finish();
     }
 }
