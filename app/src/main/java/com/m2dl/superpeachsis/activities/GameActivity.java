@@ -22,8 +22,6 @@ public class GameActivity extends Activity {
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new GameView(this, screenHeight, screenWidth));
-
-        toEndActivity();
     }
 
     public void toEndActivity() {
