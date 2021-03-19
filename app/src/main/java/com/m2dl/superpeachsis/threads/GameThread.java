@@ -2,8 +2,10 @@ package com.m2dl.superpeachsis.threads;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,6 +13,7 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.m2dl.superpeachsis.R;
 import com.m2dl.superpeachsis.actors.Barrier;
 import com.m2dl.superpeachsis.actors.Block;
 import com.m2dl.superpeachsis.actors.Enemy;
@@ -236,11 +239,21 @@ public class GameThread extends Thread {
     }
 
     private void drawPlayer(Canvas canvas) {
-        canvas.drawRect(player.getRectangle(), gameView.getPlayerPaint());
+        Drawable drawable = gameView.getResources().getDrawable(R.drawable.idle);
+        drawable.setBounds(player.getRectangle());
+        drawable.draw(canvas);
+        // canvas.drawRect(player.getRectangle(), gameView.getPlayerPaint());
     }
 
     private void drawEnemy(Canvas canvas) {
-        canvas.drawRect(enemy.getRectangle(), gameView.getEnemyPaint(enemy));
+        if (enemy instanceof Block) {
+            Drawable drawable = gameView.getResources().getDrawable(R.drawable.run);
+            drawable.setBounds(enemy.getRectangle());
+            drawable.draw(canvas);
+        }
+        else {
+            canvas.drawRect(enemy.getRectangle(), gameView.getEnemyPaint(enemy));
+        }
     }
 
     private boolean checkCollission() {

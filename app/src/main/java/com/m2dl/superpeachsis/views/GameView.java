@@ -1,7 +1,6 @@
 package com.m2dl.superpeachsis.views;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
